@@ -1,5 +1,7 @@
 # ChatApp
 
+Proyecto chat con STOMP y SocketJs usando base de datos Mongo y Backend Spring Boot 
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.2.5.
 
 ## Development server
