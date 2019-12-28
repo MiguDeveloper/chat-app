@@ -1,10 +1,14 @@
-
 <div class="card">
 
   <div class="card-header">
     <ul class="nav nav-pills card-header-pills">
+      <li *ngIf="!conectado" class="nav-item mr-2">
+        <input [(ngModel)]="mensaje.username" type="text" class="form-control" placeholder="Usuario..." name="username">
+      </li>
       <li class="nav-item mr-2">
-        <button (click)="conectar()" *ngIf="!conectado" class="btn btn-success" type="button">Conectar</button>
+        <button (click)="conectar()" *ngIf="!conectado" [disabled]="!mensaje.username" class="btn btn-success"
+                type="button">Conectar
+        </button>
       </li>
       <li class="nav-item">
         <button (click)="desconectar()" *ngIf="conectado" class="btn btn-warning" type="button">Desconectar</button>
@@ -12,10 +16,14 @@
     </ul>
   </div>
 
-  <div *ngIf="conectado" class="card-body" style="overflow-y: scroll; height: 360px">
+  <div *ngIf="conectado" #scrollChat [scrollTop]="scrollChat.scrollHeight" class="card-body" style="overflow-y: scroll; height: 360px">
     <ul class="list-group list-group-flush">
       <li class="list-group-item list-group-item-light" *ngFor="let mensaje of mensajes">
-        {{mensaje.fecha | date: 'shortTime'}} {{mensaje.texto}}
+        <span *ngIf="mensaje.tipo == 'NUEVO_USUARIO'">{{mensaje.fecha | date: 'shortTime'}} @ {{mensaje.texto}} <span
+          [ngStyle]="{'color': mensaje.color}">{{mensaje.username}}</span></span>
+        <span *ngIf="mensaje.tipo == 'MENSAJE'">{{mensaje.fecha | date: 'shortTime'}} <span
+          [ngStyle]="{'color': mensaje.color}">{{mensaje.username}}</span>
+          dice: <br> {{mensaje.texto}}</span>
       </li>
     </ul>
   </div>
@@ -23,10 +31,12 @@
   <div *ngIf="conectado" class="card-footer">
     <form class="form-inline">
       <div class="form-group mx-3">
-        <input [(ngModel)]="mensaje.texto" type="text" class="form-control" placeholder="Escribe un mensaje..." name="texto">
+        <input [(ngModel)]="mensaje.texto" (keyup)="escribiendoEvento()" type="text" class="form-control" placeholder="Escribe un mensaje..."
+               name="texto">
       </div>
       <button (click)="enviarMensaje()" class="btn btn-primary" type="submit">Enviar</button>
     </form>
+    <div>{{escribiendo}}</div>
   </div>
 
 </div>
